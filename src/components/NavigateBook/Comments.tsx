@@ -1,26 +1,26 @@
-import { useParams } from "react-router-dom"
-import styles from "./styles/Comments.module.scss"
-import bookApi from "../../services/bookApi"
-import Comment from "./Comment"
-import { useAuth } from "../../hooks/use-auth"
-import { useEffect, useState } from "react"
-import { useAppDispatch } from "../../hooks/redux"
-import { setModalAuthShowed } from "../../store/reducers/user-slice"
+import { useParams } from 'react-router-dom'
+import styles from './styles/Comments.module.scss'
+import bookApi from '../../services/bookApi'
+import Comment from './Comment'
+import { useAuth } from '../../hooks/use-auth'
+import { useEffect, useState } from 'react'
+import { useAppDispatch } from '../../hooks/redux'
+import { setModalAuthShowed } from '../../store/reducers/user-slice'
 
 const Comments = () => {
     const { id } = useParams()
     const dispatch = useAppDispatch()
-    const { data } = bookApi.useFetchBookQuery("")
+    const { data } = bookApi.useFetchBookQuery('')
     const { isAuth, email } = useAuth()
-    const [textAreaText, setTextAreaText] = useState("")
+    const [textAreaText, setTextAreaText] = useState('')
     const [obnov, setObnov] = useState(false)
     const [thisComments, setThisComments] = useState<any>([])
     const [isValid, setIsValid] = useState<boolean>(true)
 
     useEffect(() => {
-        fetch("https://books-a2888-default-rtdb.firebaseio.com/comments.json")
-            .then((response) => response.json())
-            .then((otvet) => {
+        fetch('https://books-bb563-default-rtdb.firebaseio.com/comments.json')
+            .then(response => response.json())
+            .then(otvet => {
                 setThisComments(
                     Object.values(otvet).filter((item: any) => item.id == id)
                 )
@@ -30,14 +30,14 @@ const Comments = () => {
     const fetchCommentHandler = () => {
         if (textAreaText.length > 0 && isAuth) {
             fetch(
-                "https://books-a2888-default-rtdb.firebaseio.com/comments.json",
+                'https://books-bb563-default-rtdb.firebaseio.com/comments.json',
                 {
-                    method: "POST",
+                    method: 'POST',
                     body: JSON.stringify({ id, email, comment: textAreaText }),
                 }
             ).then(() => {
-                setTextAreaText("")
-                setObnov((prev) => !prev)
+                setTextAreaText('')
+                setObnov(prev => !prev)
             })
         } else if (textAreaText.length === 0 && isAuth) {
             setIsValid(false)
@@ -51,9 +51,9 @@ const Comments = () => {
             <div className={styles.block}>
                 <textarea
                     value={textAreaText}
-                    className={`${!isValid ? styles.not : ""}`}
+                    className={`${!isValid ? styles.not : ''}`}
                     placeholder="Залиште відгук"
-                    onChange={(event) => {
+                    onChange={event => {
                         setTextAreaText(event?.target.value)
                         setIsValid(true)
                     }}
